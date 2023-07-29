@@ -52,8 +52,6 @@ public class PhoneNumberController {
     @DeleteMapping("/{phoneNumberId}")
     public ResponseEntity<String> softDeletePhoneNumber(@PathVariable Long phoneNumberId) {
         phoneNumberService.softDeletePhoneNumberById(phoneNumberId);
-
-        phoneNumberService.softDeletePhoneNumberById(phoneNumberId);
         return ResponseEntity.ok("Phone number soft deleted successfully.");
     }
 
