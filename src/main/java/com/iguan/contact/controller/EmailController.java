@@ -51,7 +51,7 @@ public class EmailController {
             return ResponseEntity.notFound().build();
         }
     }
-    @DeleteMapping("/{emailId}")
+    @DeleteMapping("/soft/{emailId}")
     public ResponseEntity<String> softDeleteEmail(@PathVariable Long emailId) {
         emailService.softDeleteEmailById(emailId);
 

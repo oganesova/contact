@@ -49,7 +49,7 @@ public class PhoneNumberController {
             return ResponseEntity.notFound().build();
         }
     }
-    @DeleteMapping("/{phoneNumberId}")
+    @DeleteMapping("/soft/{phoneNumberId}")
     public ResponseEntity<String> softDeletePhoneNumber(@PathVariable Long phoneNumberId) {
         phoneNumberService.softDeletePhoneNumberById(phoneNumberId);
         return ResponseEntity.ok("Phone number soft deleted successfully.");
