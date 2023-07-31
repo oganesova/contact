@@ -9,6 +9,7 @@ import com.iguan.contact.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -18,13 +19,20 @@ public class UserService {
     private final UserRepository userRepository;
     private final EmailRepository emailRepository;
     private final PhoneNumberRepository phoneNumberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, EmailRepository emailRepository, PhoneNumberRepository phoneNumberRepository) {
+    public UserService(UserRepository userRepository, EmailRepository emailRepository, PhoneNumberRepository phoneNumberRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.emailRepository = emailRepository;
         this.phoneNumberRepository = phoneNumberRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
+    public void registerUser(User user) {
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+        userRepository.save(user);
+    }
     public User createUser(User user) {
         return userRepository.save(user);
     }

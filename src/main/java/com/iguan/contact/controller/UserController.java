@@ -1,4 +1,5 @@
 package com.iguan.contact.controller;
+
 import com.iguan.contact.config.AuthRequest;
 import com.iguan.contact.config.AuthResponse;
 import com.iguan.contact.config.JwtTokenUtil;
@@ -39,6 +40,7 @@ public class UserController {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
     }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {
@@ -55,9 +57,11 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    public ResponseEntity<String> registerUser(@RequestBody User user) {
+
+        userService.registerUser(user);
+
+        return ResponseEntity.ok("User registered successfully.");
     }
 
     @PatchMapping("/{userId}/email")
@@ -79,6 +83,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PostMapping("/{userId}/phone")
     public ResponseEntity<User> addPhoneNumberToUser(@PathVariable Long userId, @RequestBody PhoneNumber newNumber) {
         User updatedUser = userService.addPhoneNumberToUser(userId, newNumber);
@@ -88,6 +93,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PostMapping("/{userId}/email")
     public ResponseEntity<User> addEmailToUser(@PathVariable Long userId, @RequestBody Email newEmail) {
         User updatedUser = userService.addEmailToUser(userId, newEmail);
@@ -97,6 +103,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {
         User user = userService.getUserById(userId);
@@ -106,11 +113,13 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/list")
     public ResponseEntity<Page<User>> getUsersByPage(@PageableDefault(size = 10) Pageable pageable) {
         Page<User> usersPage = userService.getUsersByPage(pageable);
         return ResponseEntity.ok(usersPage);
     }
+
     @PutMapping("/{userId}")
     public ResponseEntity<User> updateUserById(@PathVariable Long userId, @RequestBody User updatedUser) {
         User user = userService.updateUserById(userId, updatedUser);
@@ -130,6 +139,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PutMapping("/{userId}/phone")
     public ResponseEntity<User> updateUserPhoneNumberById(@PathVariable Long userId, @RequestBody PhoneNumber updatedPhoneNumber) {
         User user = userService.updateUserPhoneNumber(userId, updatedPhoneNumber);
@@ -139,11 +149,13 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @DeleteMapping("/soft/{id}")
     public ResponseEntity<String> softDeleteUser(@PathVariable Long userId) {
         userService.softDeleteUserById(userId);
         return ResponseEntity.ok("User soft deleted successfully.");
     }
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long userId) {
         userService.deleteUserById(userId);
