@@ -2,9 +2,11 @@ package com.iguan.contact.service;
 
 import com.iguan.contact.entity.Email;
 import com.iguan.contact.entity.PhoneNumber;
+import com.iguan.contact.entity.Role;
 import com.iguan.contact.entity.User;
 import com.iguan.contact.repository.EmailRepository;
 import com.iguan.contact.repository.PhoneNumberRepository;
+import com.iguan.contact.repository.RoleRepository;
 import com.iguan.contact.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,15 +22,25 @@ public class UserService {
     private final EmailRepository emailRepository;
     private final PhoneNumberRepository phoneNumberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, EmailRepository emailRepository, PhoneNumberRepository phoneNumberRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, EmailRepository emailRepository, PhoneNumberRepository phoneNumberRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.emailRepository = emailRepository;
         this.phoneNumberRepository = phoneNumberRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     public void registerUser(User user) {
+        Role defaultRole = roleRepository.findByName(Role.ROLE_USER);
+        if (defaultRole == null) {
+            defaultRole = new Role();
+            defaultRole.setName(Role.ROLE_USER);
+            defaultRole = roleRepository.save(defaultRole);
+        }
+
+        user.getRoles().add(defaultRole);
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         userRepository.save(user);

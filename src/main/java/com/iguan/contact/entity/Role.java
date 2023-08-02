@@ -21,6 +21,6 @@ public class Role {
     private Long id;
 
     private String name;
-
+    public static final String ROLE_USER = "USER";
 }
 
